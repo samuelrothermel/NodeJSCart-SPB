@@ -1,0 +1,75 @@
+<div class="row checkout">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 main">
+        <h1>Checkout</h1>
+        <h4>Your Total: ${{total}}</h4>
+        <div id="charge-error" class="alert alert-danger {{#if noError}}invisible{{/if}}">
+            {{errMsg}}
+        </div>
+        
+        <!-- PayPal Button Container -->
+        <div id="paypal-button-container"></div>
+
+        <!-- Address and Name input for the backend -->
+        <form id="hidden-form" style="display: none;">
+            <div class="main-title">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="checkout">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Load PayPal SDK with your client ID -->
+<script src="https://www.paypal.com/sdk/js?client-id=AYP7XDoBBuuwe5XRnM0cUwhLlmlJeWp-Qp8zYvOMOxFvSMIktiWzx4wnB5FTmWdG65QHJdTNMsdUlb7t&currency=USD"></script>
+
+<script>
+    paypal.Buttons({
+        style: {
+            shape: 'rect',
+            layout: 'vertical',
+            color: 'gold',
+            label: 'paypal'
+        },
+        createOrder: function(data, actions) {
+            // Fetch order from your server
+            return fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function(res) {
+                return res.json();
+            }).then(function(orderData) {
+                console.log('Order Data from server:', orderData); // Debugging
+                return orderData.id; // Return PayPal order ID
+            });
+        },
+        onApprove: function(data, actions) {
+            // Use the PayPal order ID to capture payment
+            return fetch(`/api/orders/${data.orderID}/capture`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('name').value,
+                    address: document.getElementById('address').value
+                })
+            }).then(function(res) {
+                return res.json();
+            }).then(function(orderData) {
+                {{!-- alert('Transaction completed'); --}}
+                window.location.href = '/'; // Redirect after success
+            }).catch(function(err) {
+                console.error('Error during capture:', err);
+                alert('There was an issue with the payment');
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
