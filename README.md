@@ -50,27 +50,6 @@ This project is a NodeJS Express-based eCommerce store for integrating with PayP
 - `migration:write`: Runs the product migration script.
 - `prepare`: Sets up Husky for Git hooks.
 
-## Dependencies
-
-- `@paypal/paypal-server-sdk`: PayPal SDK for server-side integration.
-- `bcrypt-nodejs`: Library for hashing passwords.
-- `body-parser`: Middleware for parsing request bodies.
-- `connect-mongo`: MongoDB session store for Express.
-- `cookie-parser`: Middleware for parsing cookies.
-- `dotenv`: Loads environment variables from a `.env` file.
-- `express`: Web framework for Node.js.
-- `express-handlebars`: Handlebars view engine for Express.
-- `express-session`: Session middleware for Express.
-- `hbs`: Handlebars view engine.
-- `mongodb`: MongoDB driver for Node.js.
-- `mongoose`: MongoDB object modeling tool.
-- `morgan`: HTTP request logger middleware.
-- `passport`: Authentication middleware for Node.js.
-
-## Dev Dependencies
-
-- `nodemon`: Utility that monitors for changes in source and automatically restarts the server.
-
 ## MongoDB Setup
 
 To use this project, you need a MongoDB account. Follow these steps to create one:
