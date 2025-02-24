@@ -10,7 +10,7 @@ const products = [
   new Product({
     imagePath: 'img url',
     title: 'Product Title',
-    description: '\n' + 'Product description goes here.',
+    description: 'Product description goes here.',
     price: 10,
   }),
   new Product({
