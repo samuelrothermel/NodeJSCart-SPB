@@ -1,4 +1,6 @@
 import express from 'express';
+import { paypalClientID } from '../config/env.js';
+
 const router = express.Router();
 
 import Cart from '../models/cart.js';
@@ -49,7 +51,20 @@ router.get('/cart', function (req, res) {
   return res.render('shop/cart', {
     products: cart.generateArray(),
     totalPrice: cart.totalPrice,
+    paypalClientID: paypalClientID,
   });
+});
+
+router.post('/cart/update-shipping', function (req, res) {
+  if (!req.session.cart) {
+    return res.status(400).json({ error: 'No cart found in session' });
+  }
+
+  const cart = new Cart(req.session.cart);
+  const shippingCost = parseFloat(req.body.shippingCost);
+  cart.totalPrice += shippingCost;
+  req.session.cart = cart;
+  res.json({ totalPrice: cart.totalPrice });
 });
 
 export default router;
